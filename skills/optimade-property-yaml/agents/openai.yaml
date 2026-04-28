@@ -1,0 +1,7 @@
+policy:
+  allow_implicit_invocation: false
+
+interface:
+  display_name: "OPTIMADE Property YAML"
+  short_description: "Drafts OPTIMADE property-definition source YAML files."
+  default_prompt: "Generate one OPTIMADE property-definition source YAML file. Follow the local authoring rules and examples. Output YAML only."

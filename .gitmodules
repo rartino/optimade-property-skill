@@ -1,0 +1,6 @@
+[submodule "external/OPTIMADE"]
+	path = external/OPTIMADE
+	url = https://github.com/Materials-Consortia/OPTIMADE.git
+[submodule "external/optimade-property-tools"]
+	path = external/optimade-property-tools
+	url = https://github.com/Materials-Consortia/optimade-property-tools.git

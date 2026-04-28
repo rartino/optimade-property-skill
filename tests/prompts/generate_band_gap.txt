@@ -1,0 +1,11 @@
+Use the optimade-property-yaml skill.
+
+Generate one OPTIMADE property-definition source YAML file for a property named `band_gap` in the `structures` context.
+
+Meaning:
+- The value is the electronic band gap of the represented structure.
+- Use electronvolt units.
+- Prefer upstream OPTIMADE unit and property-definition conventions where available.
+- Search for analogous scalar physical quantity definitions before drafting.
+- Output YAML only.
+- Do not output markdown fences or explanatory prose.

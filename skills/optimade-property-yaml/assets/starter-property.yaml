@@ -1,0 +1,13 @@
+$$schema: "https://schemas.optimade.org/meta/v1.2/optimade/property_definition"
+$id: "https://example.org/defs/v0.1.0/properties/structures/example_property"
+title: "Example property"
+x-optimade-type: "string"
+x-optimade-definition:
+  kind: "property"
+  version: "0.1.0"
+  format: "1.2"
+  name: "example_property"
+  label: "example_property_provider_structures"
+type: "string"
+description: |-
+  A short description of the example property.
