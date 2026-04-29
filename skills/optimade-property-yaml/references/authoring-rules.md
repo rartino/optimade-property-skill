@@ -47,6 +47,23 @@ Use a human-readable title. Do not simply copy the snake_case property name unle
 
 Use precise, normative language. Use YAML block scalars for long descriptions. State units and interpretation clearly. Mention relationships to other properties only when known.
 
+Use YAML's `|-` block-scalar style for all multi-line descriptions. Prefer one sentence per source line, even within the same paragraph, because this makes source diffs readable and avoids rewriting whole paragraphs for small textual edits. Preserve blank lines between conceptual paragraphs and section headings.
+
+For dictionary properties, include a `**Requirements/Conventions**` section. Describe the dictionary itself with the exact sentence `It MUST be a dictionary with the following keys:` and then document each key as a markdown sublist item in this form:
+
+```markdown
+- It MUST be a dictionary with the following keys:
+
+    - **field_name**: REQUIRED; Type phrase.
+      Explanation sentence.
+      Additional explanation sentence when needed.
+
+    - **optional_field**: OPTIONAL; Type phrase.
+      Explanation sentence.
+```
+
+Use `REQUIRED` or `OPTIONAL` explicitly. Give the value type immediately after the semicolon, e.g. `String.`, `Boolean.`, `Integer 3x3 matrix.`, `List of 3 Integers.`, or `List of 3 Fractions (String).` Keep follow-up explanation lines indented under the same field item. Escape underscores in markdown field names where needed, e.g. `**rot\_type**`.
+
 ## `x-optimade-type`
 
 Choose the OPTIMADE type from the property shape:
@@ -55,8 +72,11 @@ Choose the OPTIMADE type from the property shape:
 - Use `list` for arrays and include `items` definitions.
 - Use `dictionary` for object-like mappings and include `properties` or describe the mapping clearly.
 - For nested arrays, each list level should have its own `x-optimade-type`, JSON Schema `type`, `x-optimade-unit`, and `items` where applicable.
+- Use `x-optimade-dimensions` for arrays with known semantic dimensions. Provide both `names` and `sizes`, e.g. a 3-vector should use `names: ["dim_lattice"]` and `sizes: [3]`, and a 3 by 3 matrix should use `names: ["dim_lattice", "dim_lattice"]` and `sizes: [3, 3]`.
 
 Keep `x-optimade-type` aligned with JSON Schema `type` and `items`. Typical mappings are `float` to `number`, `integer` to `integer`, `string` to `string`, `boolean` to `boolean`, `list` to `array`, and `dictionary` to `object`. Include `null` in `type` only when the provider convention allows unknown or unavailable values.
+
+Represent exact fractional vectors as lists of fraction strings, not as one comma-separated string. For example, use `["0", "0", "1/4"]` for a 3-vector of fractions. Describe this shape as `List of 3 Fractions (String).`
 
 ## Units
 
@@ -67,6 +87,8 @@ Use `$$inherit` only when an appropriate inherited unit definition exists in the
 ## Examples
 
 Include examples when they clarify value shape or units. Keep examples minimal and schema-compatible. Do not add examples if the user explicitly wants a minimal file.
+
+Use curated examples as formatting guides, not only as semantic references. In particular, `_exmpl_symop.yaml` demonstrates the preferred style for dictionary properties, markdown key documentation, fixed array dimensions, and exact fraction vectors.
 
 ## Do Not Guess
 

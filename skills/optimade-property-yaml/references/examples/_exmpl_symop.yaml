@@ -1,0 +1,166 @@
+$$schema: https://schemas.optimade.org/meta/v1.3/optimade/property_definition
+$id: https://schemas.example.com/v0.1/properties/symmetry/symop
+title: symmetry operation
+$comment: A single crystallographic symmetry-operation object used inside point-group and space-group operation lists.
+x-optimade-type: dictionary
+x-optimade-definition:
+  kind: property
+  version: 0.1.0
+  format: '1.3'
+  name: symop
+  label: symop_symmetry
+x-optimade-unit: inapplicable
+type:
+- object
+- 'null'
+description: |-
+  A single crystallographic symmetry operation, represented by its linear part and by standard descriptors of the corresponding rotation, rotoinversion, or mirror operation.
+  It describes the common fields that identify the linear operation and allows the additional translational descriptors needed for space-group affine operations.
+
+  **Requirements/Conventions**:
+
+  - It MUST be a dictionary with the following keys:
+
+      - **rmat**: REQUIRED; Integer 3x3 matrix.
+        The transformation matrix acting on the fractional coordinates.
+        For a point-group operation this matrix is the complete operation. For a space-group operation this matrix is the rotational part of an affine operation.
+
+      - **xyz**: REQUIRED; String.
+        Coordinate expression for the operation in `x,y,z` notation. For a point-group operation this expression represents only the linear part.
+        For a space-group operation it also includes the affine translation part.
+
+      - **rot\_type**: REQUIRED; String.
+        Gives the crystallographic operation-type label for the linear part.
+        The value `1` denotes the identity, `-1` inversion, `2`, `3`, `4`, and `6` proper rotations, `m` a mirror operation, and `-3`, `-4`, and `-6` rotoinversions.
+        The label classifies the linear operation only; screw and glide information is represented separately.
+
+      - **is\_proper**: REQUIRED; Boolean.
+        States whether the linear operation is proper, i.e., whether `det(rmat) = +1`.
+        Improper operations have `det(rmat) = -1`.
+
+      - **axis**: REQUIRED; List of 3 Integers.
+        The operation axis or invariant direction using the integer-vector convention returned by the generator.
+        It is `null` or `[0,0,0]` when no unique axis is defined, e.g., for the identity or inversion.
+
+      - **sense**: REQUIRED; Integer.
+        The sense/sign for the rotation: positive for counterclockwise, negative for clockwise, and zero when no handed rotation sense is applicable.
+
+      - **screw\_glide**: OPTIONAL; List of 3 Fractions (String).
+        When present, gives the screw-axis or glide-plane component associated with the affine operation, represented exactly as fractions.
+
+      - **origin\_shift**: OPTIONAL; List of 3 Fractions (String).
+        When present, gives the origin shift associated with the screw/glide decomposition, represented exactly as fractions.
+properties:
+  rmat:
+    x-optimade-type: list
+    x-optimade-unit: inapplicable
+    x-optimade-dimensions:
+      names: ["dim_lattice", "dim_lattice"]
+      sizes: [3, 3]
+    type:
+    - array
+    - 'null'
+    description: Linear part of the operation as three rows of a 3 by 3 integer matrix acting on fractional coordinates.
+    items:
+      x-optimade-type: list
+      x-optimade-unit: inapplicable
+      x-optimade-dimensions:
+        names: ["dim_lattice"]
+        sizes: [3]
+      type:
+      - array
+      description: One row of the 3 by 3 integer matrix.
+      items:
+        x-optimade-type: integer
+        x-optimade-unit: dimensionless
+        type:
+        - integer
+        description: One integer matrix entry.
+  xyz:
+    x-optimade-type: string
+    x-optimade-unit: inapplicable
+    type:
+    - string
+    - 'null'
+    description: Optional operation in `x,y,z` coordinate notation.
+  rot_type:
+    x-optimade-type: string
+    x-optimade-unit: inapplicable
+    type:
+    - string
+    - 'null'
+    description: Crystallographic operation-type label for the linear part, such as `1`, `-1`, `2`, `m`, `-3`, `4`, `-4`, `6`, or `-6`.
+  is_proper:
+    x-optimade-type: boolean
+    x-optimade-unit: inapplicable
+    type:
+    - boolean
+    - 'null'
+    description: Whether the linear operation is proper, i.e., whether the determinant of `rmat` is +1.
+  axis:
+    x-optimade-type: list
+    x-optimade-unit: inapplicable
+    x-optimade-dimensions:
+      names: ["dim_lattice"]
+      sizes: [3]
+    type:
+    - array
+    - 'null'
+    description: Integer-vector axis or invariant-direction descriptor for the operation.
+    items:
+      x-optimade-type: integer
+      x-optimade-unit: inapplicable
+      type:
+      - integer
+      description: One integer component of the axis vector.
+  sense:
+    x-optimade-type: integer
+    x-optimade-unit: inapplicable
+    type:
+    - integer
+    - 'null'
+    description: Rotation sense/sign convention returned by the generator; `0` is used when no handed rotation sense is applicable.
+  screw_glide:
+    x-optimade-type: string
+    x-optimade-unit: inapplicable
+    type:
+    - string
+    - 'null'
+    description: Optional screw-axis or glide-plane component for a space-group affine operation, represented exactly as comma-separated fractional components.
+  origin_shift:
+    x-optimade-type: string
+    x-optimade-unit: inapplicable
+    type:
+    - string
+    - 'null'
+    description: Optional origin-shift descriptor associated with the screw/glide decomposition of a space-group affine operation, represented exactly as comma-separated fractional components.
+examples:
+- rmat:
+  - [1, 0, 0]
+  - [0, 1, 0]
+  - [0, 0, 1]
+  xyz: x,y,z
+  rot_type: '1'
+  is_proper: true
+  axis: [0, 0, 0]
+  sense: 0
+- rmat:
+  - [-1, 0, 0]
+  - [0, 1, 0]
+  - [0, 0, 1]
+  xyz: -x,y,z
+  rot_type: m
+  is_proper: false
+  axis: [1, 0, 0]
+  sense: 0
+- rmat:
+  - [0, -1, 0]
+  - [1, 0, 0]
+  - [0, 0, 1]
+  xyz: -y,x,z+1/4
+  rot_type: '4'
+  is_proper: true
+  axis: [0, 0, 1]
+  sense: 1
+  screw_glide: [ "0", "0", "1/4" ]
+  origin_shift: [ "0", "0", "0" ]

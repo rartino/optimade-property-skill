@@ -42,7 +42,10 @@ This skill creates source YAML files for OPTIMADE property definitions. The outp
 - `x-optimade-definition.name` must match the intended property name.
 - `x-optimade-definition.label` must follow the chosen label convention from `authoring-rules.md`.
 - `x-optimade-type` must match the declared property shape.
-- `description` must be normative, precise, and style-consistent with OPTIMADE examples.
+- `description` must be normative, precise, and style-consistent with OPTIMADE examples. For multi-line descriptions, use YAML `|-` block scalars and prefer one sentence per source line.
+- Dictionary properties should document keys under `**Requirements/Conventions**` using `It MUST be a dictionary with the following keys:` and markdown subitems that state REQUIRED/OPTIONAL, type, and explanation.
+- Use `x-optimade-dimensions` for fixed-size arrays and matrices when dimensions are known.
+- Represent exact fractional vectors as lists of fraction strings, not comma-separated strings.
 - Use `x-optimade-unit` and `x-optimade-unit-definitions` only when semantically justified.
 - Use `$$inherit` only when there is a clear upstream pattern to inherit from.
 
