@@ -20,12 +20,13 @@ This skill creates source YAML files for OPTIMADE property definitions. The outp
 1. Read `references/spec-notes.md`.
 2. Read `references/authoring-rules.md`.
 3. Inspect curated examples in `references/examples/`.
-4. When available, consult `external/OPTIMADE` for standard source YAML definitions.
-5. When available, consult `external/optimade-property-tools` for tooling conventions.
-6. Start from `assets/starter-property.yaml`.
-7. Draft a single source YAML document.
-8. If writing to disk, run `scripts/validate_yaml.py` on the generated file.
-9. Return only the YAML document when asked to generate a file inline.
+4. Before drafting, identify whether the requested property contains nested objects that should be represented by existing reusable semantic definitions, or by a new reusable semantic definition.
+5. When available, consult `external/OPTIMADE` for standard source YAML definitions.
+6. When available, consult `external/optimade-property-tools` for tooling conventions.
+7. Start from `assets/starter-property.yaml`.
+8. Draft a single source YAML document.
+9. If writing to disk, run `scripts/validate_yaml.py` on the generated file.
+10. Return only the YAML document when asked to generate a file inline.
 
 ## Retrieval And Reference Behavior
 
@@ -44,10 +45,13 @@ This skill creates source YAML files for OPTIMADE property definitions. The outp
 - `x-optimade-type` must match the declared property shape.
 - `description` must be normative, precise, and style-consistent with OPTIMADE examples. For multi-line descriptions, use YAML `|-` block scalars and prefer one sentence per source line.
 - Dictionary properties should document keys under `**Requirements/Conventions**` using `It MUST be a dictionary with the following keys:` and markdown subitems that state REQUIRED/OPTIONAL, type, and explanation.
+- Prefer reusable common properties for nested structures that have semantic identity across multiple fields. Such reusable definitions should be broken out even when they are used inside another property rather than exposed directly as top-level entry fields.
+- Do not factor out nested definitions merely because they share the same JSON shape. A generic 3-vector, 3x3 matrix, or list-of-strings should usually remain inline unless the field name and domain semantics make it an independently meaningful concept.
 - Use `x-optimade-dimensions` for fixed-size arrays and matrices when dimensions are known.
 - Represent exact fractional vectors as lists of fraction strings, not comma-separated strings.
 - Use `x-optimade-unit` and `x-optimade-unit-definitions` only when semantically justified.
 - Use `$$inherit` only when there is a clear upstream pattern to inherit from.
+- When inheriting a reusable standalone definition that has its own `$id` and semantic value as a definition, inherit it verbatim. Do not alter it with `$$keep`, local overrides, or partial field selection; validation rules that depend on higher-level context should be handled at the higher level.
 
 ## Output Rules
 
