@@ -49,6 +49,8 @@ This skill creates source YAML files for OPTIMADE property definitions. The outp
 - Do not factor out nested definitions merely because they share the same JSON shape. A generic 3-vector, 3x3 matrix, or list-of-strings should usually remain inline unless the field name and domain semantics make it an independently meaningful concept.
 - Do not use dictionary keys to carry domain data. If a collection is conceptually keyed by values such as identifiers, labels, numbers, names, or coordinates, model it as a list of dictionaries where the former key is an explicit field in each item.
 - If fast lookup by such values is needed, recommend a separate index structure outside the OPTIMADE property definitions. Index dictionaries may use data-bearing keys because they are implementation lookup aids, not semantic properties.
+- Avoid recursive property schemas. If the source representation is recursive, look for a bounded flattened representation using explicit registries, fixed-depth rule tables, lists of dictionaries, and references by stable identifiers.
+- If flattening a recursive source model is not obviously semantics-preserving, require a converter or round-trip test against the source representation before adopting the flattened property definition. Document the reconstruction semantics in the property description when users may need to recover the source form.
 - Use `x-optimade-dimensions` for fixed-size arrays and matrices when dimensions are known.
 - Represent exact fractional vectors as lists of fraction strings, not comma-separated strings.
 - Use `x-optimade-unit` and `x-optimade-unit-definitions` only when semantically justified.

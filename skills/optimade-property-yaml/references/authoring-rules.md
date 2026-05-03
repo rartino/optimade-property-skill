@@ -175,6 +175,31 @@ Keep parent properties responsible for context.
 If the same reusable object is used in two contexts with different required/optional fields, do not alter the inherited definition.
 Instead, make the reusable definition broad enough to describe the common object and document context-specific requirements in the parent property.
 
+## Avoid Recursive Property Schemas
+
+Avoid recursive property definitions where a property or nested object directly or indirectly contains another instance of itself.
+Even when a JSON Schema dialect can express recursion, recursive shapes are harder to document clearly, harder for schema browsers to render, and harder for generic clients to validate and consume consistently.
+
+If the source data is recursive, first look for a bounded, non-recursive representation that preserves the same semantics.
+Common flattening patterns include:
+
+- a registry of primitive objects with stable identifiers;
+- fixed-depth rule tables rather than open-ended expression trees;
+- lists of dictionaries where references are explicit fields;
+- explicit parent, child, target, or rule identifiers instead of nested self-similar objects;
+- separate semantic data lists plus non-semantic lookup indices when fast access is needed.
+
+Do not flatten by merely hiding the recursion in data-bearing dictionary keys or unconstrained `properties: {}` maps.
+The flattened representation should make every meaningful value an ordinary schema-validated field.
+
+When it is not obvious that the flattened representation is equivalent to the source representation, require a converter or round-trip test before adopting it.
+The test should reconstruct the source representation, or otherwise compare source and flattened semantics over the relevant cases.
+If users may need to recover the source form, document the reconstruction rule in the property description.
+
+For example, a provider may receive an asymmetric-unit boundary expression as a recursive tree from a source library.
+A good OPTIMADE-facing property can instead represent the same information as a bounded set of plane definitions and fixed-depth boundary rule tables, provided a small reconstruction routine or exhaustive test demonstrates equivalence to the source tree.
+This is an example of the flattening principle, not a general endorsement of any particular scientific category or provider-specific naming scheme.
+
 ## Examples
 
 Include examples when they clarify value shape or units. Keep examples minimal and schema-compatible. Do not add examples if the user explicitly wants a minimal file.
