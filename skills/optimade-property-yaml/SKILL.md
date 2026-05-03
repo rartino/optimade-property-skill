@@ -47,6 +47,8 @@ This skill creates source YAML files for OPTIMADE property definitions. The outp
 - Dictionary properties should document keys under `**Requirements/Conventions**` using `It MUST be a dictionary with the following keys:` and markdown subitems that state REQUIRED/OPTIONAL, type, and explanation.
 - Prefer reusable common properties for nested structures that have semantic identity across multiple fields. Such reusable definitions should be broken out even when they are used inside another property rather than exposed directly as top-level entry fields.
 - Do not factor out nested definitions merely because they share the same JSON shape. A generic 3-vector, 3x3 matrix, or list-of-strings should usually remain inline unless the field name and domain semantics make it an independently meaningful concept.
+- Do not use dictionary keys to carry domain data. If a collection is conceptually keyed by values such as identifiers, labels, numbers, names, or coordinates, model it as a list of dictionaries where the former key is an explicit field in each item.
+- If fast lookup by such values is needed, recommend a separate index structure outside the OPTIMADE property definitions. Index dictionaries may use data-bearing keys because they are implementation lookup aids, not semantic properties.
 - Use `x-optimade-dimensions` for fixed-size arrays and matrices when dimensions are known.
 - Represent exact fractional vectors as lists of fraction strings, not comma-separated strings.
 - Use `x-optimade-unit` and `x-optimade-unit-definitions` only when semantically justified.

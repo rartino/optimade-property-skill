@@ -90,6 +90,58 @@ Use `$$inherit` when reusing a shared definition rather than duplicating a neste
 
 If the inherited target is a reusable standalone definition with its own `$id` and semantic value as an independently addressable definition, inherit it verbatim. Do not combine it with `$$keep`, local overrides, or partial field selection. Such trimming changes the meaning of the referenced definition while preserving its identity, which makes validation and documentation misleading. If a parent property needs stricter presence/absence rules for inherited fields, describe or validate those constraints at the parent level instead.
 
+## Avoid Data-Bearing Dictionary Keys
+
+OPTIMADE property definitions should not rely on dictionary keys as scientific, mathematical, or domain data.
+Dictionary keys in a property schema should be fixed field identifiers, not values such as names, labels, numbers, coordinates, external IDs, or category codes.
+
+Do not define a semantic property as a map whose keys are data values, for example:
+
+```yaml
+properties:
+  "42":
+    ...
+  "63":
+    ...
+```
+
+or:
+
+```yaml
+properties: {}
+description: Values are keyed by object label.
+```
+
+Instead, represent the collection as a list of dictionaries and make the former key an explicit field on each item:
+
+```yaml
+x-optimade-type: list
+type:
+- array
+items:
+  x-optimade-type: dictionary
+  type:
+  - object
+  required: [identifier, value]
+  properties:
+    identifier:
+      x-optimade-type: string
+      x-optimade-unit: inapplicable
+      type:
+      - string
+      description: Identifier that was previously used as the dictionary key.
+    value:
+      ...
+```
+
+This makes the data model explicit, validates the former key with the same schema machinery as every other value, and avoids hiding important semantics in JSON object member names.
+It also keeps the property compatible with tools that treat dictionary keys as schema structure rather than data.
+
+If consumers need fast lookup by identifiers, recommend a companion index outside the OPTIMADE property definitions.
+Such indices may be ordinary JSON dictionaries keyed by data values because they are implementation lookup aids, not semantic OPTIMADE properties.
+For example, a data file may expose a list-valued property under its semantic `data` payload and a separate top-level `indices` or provider-specific lookup section that maps identifiers to list positions.
+Do not define those lookup indices as OPTIMADE properties unless their keys are fixed schema fields rather than data values.
+
 ## Reusable Semantic Definitions
 
 Before writing a property that contains nested dictionaries or repeated object shapes, do a semantic factoring pass.
